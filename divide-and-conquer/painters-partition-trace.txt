@@ -1,0 +1,65 @@
+int arr[] = { 10, 20, 60, 50, 30, 40 };
+int n = 6, k = 3;
+
+// Cumulative sum keeps track of accummulated time assuming 1 painter does all the work.
+sum
+    [0]: 0     [1]: 10     [2]: 30     [3]: 90     [4]: 140     [5]: 170     [6]: 210
+
+dp
+    [0]: 0     [1]: 00     [2]: 00     [3]: 00     [4]: 000    [5]: 000    [6]: 000		// empty
+	[0]: 0     [1]: 10     [2]: 30     [3]: 90     [4]: 140    [5]: 170    [6]: 210		// partitions: {(10, 20, 60, 50, 30, 40), (), ()}
+    [0]: 0     [1]: 10     [2]: 20     [3]: 60     [4]: 90     [5]: 90     [6]: 120		// partitions: {(10, 20), (60), (50, 30, 40)}
+    [0]: 0     [1]: 10     [2]: 20     [3]: 60     [4]: 60     [5]: 80     [6]: 90		// partitions: {(10, 20, 60), (50), (30, 40)}	
+	
+sum = {0, 10, 30, 90, 140, 170, 210, }
+i: 2; j: 2; p: 1; best = min( best, max( dp[ indx( i - 1, p ) ], sum[ j ] - sum[ p ] ) ) = min( 2147483647, max( 10, 20 ) ) = 20
+i: 2; j: 2; p: 2; best = min( best, max( dp[ indx( i - 1, p ) ], sum[ j ] - sum[ p ] ) ) = min( 20, max( 30, 0 ) ) = 20
+dp[ 2, 2 ] = 20
+i: 2; j: 3; p: 1; best = min( best, max( dp[ indx( i - 1, p ) ], sum[ j ] - sum[ p ] ) ) = min( 2147483647, max( 10, 80 ) ) = 80
+i: 2; j: 3; p: 2; best = min( best, max( dp[ indx( i - 1, p ) ], sum[ j ] - sum[ p ] ) ) = min( 80, max( 30, 60 ) ) = 60
+i: 2; j: 3; p: 3; best = min( best, max( dp[ indx( i - 1, p ) ], sum[ j ] - sum[ p ] ) ) = min( 60, max( 90, 0 ) ) = 60
+dp[ 2, 3 ] = 60
+i: 2; j: 4; p: 1; best = min( best, max( dp[ indx( i - 1, p ) ], sum[ j ] - sum[ p ] ) ) = min( 2147483647, max( 10, 130 ) ) = 130
+i: 2; j: 4; p: 2; best = min( best, max( dp[ indx( i - 1, p ) ], sum[ j ] - sum[ p ] ) ) = min( 130, max( 30, 110 ) ) = 110
+i: 2; j: 4; p: 3; best = min( best, max( dp[ indx( i - 1, p ) ], sum[ j ] - sum[ p ] ) ) = min( 110, max( 90, 50 ) ) = 90
+i: 2; j: 4; p: 4; best = min( best, max( dp[ indx( i - 1, p ) ], sum[ j ] - sum[ p ] ) ) = min( 90, max( 140, 0 ) ) = 90
+dp[ 2, 4 ] = 90
+i: 2; j: 5; p: 1; best = min( best, max( dp[ indx( i - 1, p ) ], sum[ j ] - sum[ p ] ) ) = min( 2147483647, max( 10, 160 ) ) = 160
+i: 2; j: 5; p: 2; best = min( best, max( dp[ indx( i - 1, p ) ], sum[ j ] - sum[ p ] ) ) = min( 160, max( 30, 140 ) ) = 140
+i: 2; j: 5; p: 3; best = min( best, max( dp[ indx( i - 1, p ) ], sum[ j ] - sum[ p ] ) ) = min( 140, max( 90, 80 ) ) = 90
+i: 2; j: 5; p: 4; best = min( best, max( dp[ indx( i - 1, p ) ], sum[ j ] - sum[ p ] ) ) = min( 90, max( 140, 30 ) ) = 90
+i: 2; j: 5; p: 5; best = min( best, max( dp[ indx( i - 1, p ) ], sum[ j ] - sum[ p ] ) ) = min( 90, max( 170, 0 ) ) = 90
+dp[ 2, 5 ] = 90
+i: 2; j: 6; p: 1; best = min( best, max( dp[ indx( i - 1, p ) ], sum[ j ] - sum[ p ] ) ) = min( 2147483647, max( 10, 200 ) ) = 200
+i: 2; j: 6; p: 2; best = min( best, max( dp[ indx( i - 1, p ) ], sum[ j ] - sum[ p ] ) ) = min( 200, max( 30, 180 ) ) = 180
+i: 2; j: 6; p: 3; best = min( best, max( dp[ indx( i - 1, p ) ], sum[ j ] - sum[ p ] ) ) = min( 180, max( 90, 120 ) ) = 120
+i: 2; j: 6; p: 4; best = min( best, max( dp[ indx( i - 1, p ) ], sum[ j ] - sum[ p ] ) ) = min( 120, max( 140, 70 ) ) = 120
+i: 2; j: 6; p: 5; best = min( best, max( dp[ indx( i - 1, p ) ], sum[ j ] - sum[ p ] ) ) = min( 120, max( 170, 40 ) ) = 120
+i: 2; j: 6; p: 6; best = min( best, max( dp[ indx( i - 1, p ) ], sum[ j ] - sum[ p ] ) ) = min( 120, max( 210, 0 ) ) = 120
+dp[ 2, 6 ] = 120
+i: 3; j: 2; p: 1; best = min( best, max( dp[ indx( i - 1, p ) ], sum[ j ] - sum[ p ] ) ) = min( 2147483647, max( 0, 20 ) ) = 20
+i: 3; j: 2; p: 2; best = min( best, max( dp[ indx( i - 1, p ) ], sum[ j ] - sum[ p ] ) ) = min( 20, max( 20, 0 ) ) = 20
+dp[ 3, 2 ] = 20
+i: 3; j: 3; p: 1; best = min( best, max( dp[ indx( i - 1, p ) ], sum[ j ] - sum[ p ] ) ) = min( 2147483647, max( 0, 80 ) ) = 80
+i: 3; j: 3; p: 2; best = min( best, max( dp[ indx( i - 1, p ) ], sum[ j ] - sum[ p ] ) ) = min( 80, max( 20, 60 ) ) = 60
+i: 3; j: 3; p: 3; best = min( best, max( dp[ indx( i - 1, p ) ], sum[ j ] - sum[ p ] ) ) = min( 60, max( 60, 0 ) ) = 60
+dp[ 3, 3 ] = 60
+i: 3; j: 4; p: 1; best = min( best, max( dp[ indx( i - 1, p ) ], sum[ j ] - sum[ p ] ) ) = min( 2147483647, max( 0, 130 ) ) = 130
+i: 3; j: 4; p: 2; best = min( best, max( dp[ indx( i - 1, p ) ], sum[ j ] - sum[ p ] ) ) = min( 130, max( 20, 110 ) ) = 110
+i: 3; j: 4; p: 3; best = min( best, max( dp[ indx( i - 1, p ) ], sum[ j ] - sum[ p ] ) ) = min( 110, max( 60, 50 ) ) = 60
+i: 3; j: 4; p: 4; best = min( best, max( dp[ indx( i - 1, p ) ], sum[ j ] - sum[ p ] ) ) = min( 60, max( 90, 0 ) ) = 60
+dp[ 3, 4 ] = 60
+i: 3; j: 5; p: 1; best = min( best, max( dp[ indx( i - 1, p ) ], sum[ j ] - sum[ p ] ) ) = min( 2147483647, max( 0, 160 ) ) = 160
+i: 3; j: 5; p: 2; best = min( best, max( dp[ indx( i - 1, p ) ], sum[ j ] - sum[ p ] ) ) = min( 160, max( 20, 140 ) ) = 140
+i: 3; j: 5; p: 3; best = min( best, max( dp[ indx( i - 1, p ) ], sum[ j ] - sum[ p ] ) ) = min( 140, max( 60, 80 ) ) = 80
+i: 3; j: 5; p: 4; best = min( best, max( dp[ indx( i - 1, p ) ], sum[ j ] - sum[ p ] ) ) = min( 80, max( 90, 30 ) ) = 80
+i: 3; j: 5; p: 5; best = min( best, max( dp[ indx( i - 1, p ) ], sum[ j ] - sum[ p ] ) ) = min( 80, max( 90, 0 ) ) = 80
+dp[ 3, 5 ] = 80
+i: 3; j: 6; p: 1; best = min( best, max( dp[ indx( i - 1, p ) ], sum[ j ] - sum[ p ] ) ) = min( 2147483647, max( 0, 200 ) ) = 200
+i: 3; j: 6; p: 2; best = min( best, max( dp[ indx( i - 1, p ) ], sum[ j ] - sum[ p ] ) ) = min( 200, max( 20, 180 ) ) = 180
+i: 3; j: 6; p: 3; best = min( best, max( dp[ indx( i - 1, p ) ], sum[ j ] - sum[ p ] ) ) = min( 180, max( 60, 120 ) ) = 120
+i: 3; j: 6; p: 4; best = min( best, max( dp[ indx( i - 1, p ) ], sum[ j ] - sum[ p ] ) ) = min( 120, max( 90, 70 ) ) = 90
+i: 3; j: 6; p: 5; best = min( best, max( dp[ indx( i - 1, p ) ], sum[ j ] - sum[ p ] ) ) = min( 90, max( 90, 40 ) ) = 90
+i: 3; j: 6; p: 6; best = min( best, max( dp[ indx( i - 1, p ) ], sum[ j ] - sum[ p ] ) ) = min( 90, max( 120, 0 ) ) = 90
+dp[ 3, 6 ] = 90
+findMax(arr, n, k) = 90

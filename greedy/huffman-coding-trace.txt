@@ -1,0 +1,64 @@
+curr: 100
+string = null
+leftStack: f
+middleStack: 100
+rightStack: 55
+
+leftStack.pop()
+curr: f
+string = '0'
+leftStack: null
+middleStack: 100
+rightStack: 55 null
+
+null on both left and right subtree
+string = null
+leftStack = 
+middleStack = 100
+rightStack: 55
+
+both and left and right children of 100 not visited
+string = null
+leftStack:
+middleStack: 100
+rightStack: 55
+
+rightStack.pop()
+curr: 55
+string = '1'
+leftStack: 25
+middleStack: 100 55
+rightStack: 30
+
+leftStack.pop()
+curr: 25
+string = '10'
+leftStack: c
+middleStack: 100 55 25
+rightStack: 30 d
+
+leftStack.pop()
+curr: c
+string = '100'
+leftStack: null
+middleStack: 100 55 25
+rightStack: 30 d null
+
+null on both left and right subtree
+string = '10'
+leftStack: 
+middleStack: 100 55 25
+rightStack: 30 d
+
+rightStack.pop()
+curr: d
+string = '101'
+leftStack: null
+middleStack: 100 55 25
+rightStack: 30 null
+
+null on both left and right subtree
+string = '10'
+leftStack: 
+middleStack: 100 55 25
+rightStack: 30
