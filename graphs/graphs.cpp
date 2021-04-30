@@ -35,6 +35,9 @@ public:
 	// prints a Topological Sort of
 	// the complete graph
 	void topologicalSort();
+
+	// Depth first search of the graph starting from node start.
+	void dfs( int start );
 };
 
 Graph::Graph( int inV ) :
@@ -74,47 +77,62 @@ void Graph::topologicalSortUtil( int v, vector<bool>& visited, stack<int>& Stack
 void Graph::topologicalSortUtil( int v, vector<bool>& visited, stack<int>& Stack )
 {
 	/*
-	* hs = Helper stack
-	* hs <- v
-	* keepGoing = true
-	* while keepGoing:
-	*	keepGoing = false
-	*	i <- hs.top
-	*	if i not in visited:
-	*		visited <- i
-	*		for j in adj[i]:
-	*			if j not in visited:
-	*				hs <- j
-	*				keepGoing = true
-	*				break
-	* while hs not empty:
-	*	Stack <- hs.pop()
+	*	Stack ls;	// Local stack
+	*	ls.push(node);
+	*
+	*	While ls not empty:
+	*		Curr = ls.top()
+	*		If curr not in visited:
+	*			Visited <- curr
+	*
+	*		addCurrToMs = false
+	*		For each node ‘adj’ adjacent to curr in graph:
+	*			If adj not in visited:
+	*				addCurrToMs = true
+	*				ls.push(adj)
+	*		
+	*		If addCurrToMs:
+	*			Ms <- curr
+	* 
+	*		If curr is ls.top()	// Remove curr if it is top of ls
+	*			ls.pop()
+	*
 	*/
-	stack<int> helper;
-	helper.push( v );
-	bool keepGoing = true;
-	while( keepGoing )
+	stack<int> localStack;
+	localStack.push( v );
+
+	while( !localStack.empty() )
 	{
-		keepGoing = false;
-		auto i = helper.top();
-		if( !visited[ i ] )
+		const auto currNode = localStack.top();
+
+		// Add currNode to visited
+		if( !visited[ currNode ] )
 		{
-			visited[ i ] = true;
-			for( auto j = adj[ i ].begin(); j != adj[ i ].end(); ++j )
+			visited[ currNode ] = true;
+		}
+
+		// Add all non-visited nodes adjacent to currNode to localStack.
+		bool addCurrNode = true;
+		for( auto i = adj[ currNode ].begin(); i != adj[ currNode ].end(); ++i )
+		{
+			if( !visited[ *i ] )
 			{
-				if( !visited[ *j ] )
-				{
-					helper.push( *j );
-					keepGoing = true;
-					break;
-				}
+				addCurrNode = false;
+				localStack.push( *i );
 			}
 		}
-	}
-	while( !helper.empty() )
-	{
-		Stack.push( helper.top() );
-		helper.pop();
+
+		// If nothing was added, push currNode onto Stack.
+		if( addCurrNode )
+		{
+			Stack.push( currNode );
+		}
+
+		// If the top of the localStack is currNode, pop it off the localStack
+		if( currNode == localStack.top() )
+		{
+			localStack.pop();
+		}
 	}
 }
 
@@ -143,6 +161,41 @@ void Graph::topologicalSort()
 	}
 }
 
+// Depth first search of the graph starting from node start.
+void Graph::dfs( int start )
+{
+	// DFS stack.
+	stack<int> dfsStack;
+	dfsStack.push( start );
+
+	// Visited nodes.
+	vector<bool> visited( V, false );
+
+	// Until the stack is empty:
+	while( !dfsStack.empty() )
+	{
+		// Pop the top of the stack.
+		const auto top = dfsStack.top();
+		dfsStack.pop();
+
+		// Print the current node if its not yet visited.
+		if( !visited[ top ] )
+		{
+			visited[ top ] = true;
+			cout << top << " ";
+		}
+
+		// Push all the non-visited nodes adjacent to top onto the stack.
+		for( auto i = adj[ top ].begin(); i != adj[ top ].end(); ++i )
+		{
+			if( !visited[ *i ] )
+			{
+				dfsStack.push( *i );
+			}
+		}
+	}
+}
+
 // Driver Code
 int main()
 {
@@ -155,11 +208,24 @@ int main()
 	g.addEdge( 2, 3 );
 	g.addEdge( 3, 1 );
 
+	// Do topological sort.
 	cout << "Following is a Topological Sort of the given "
 		"graph \n";
-
-	// Function Call
 	g.topologicalSort();
+
+	// DFS
+	//// Create a graph given in the above diagram
+	//Graph g(10);
+	//g.addEdge( 0, 1 );
+	//g.addEdge( 0, 9 );
+	//g.addEdge( 1, 2 );
+	//g.addEdge( 2, 0 );
+	//g.addEdge( 2, 3 );
+	//g.addEdge( 9, 3 );
+
+	//cout << "Following is Depth First Traversal"
+	//	" (starting from vertex 2) \n";
+	//g.dfs( 2 );
 
 	return 0;
 }
