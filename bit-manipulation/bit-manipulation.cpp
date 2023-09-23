@@ -7,7 +7,8 @@ using namespace std;
 enum class Test
 {
     Test_FirstSetBit,
-    Test_RightmostDiffBit
+    Test_RightmostDiffBit,
+    Test_CountBitsFlip
 };
 
 /*  function to find position of first set
@@ -54,9 +55,13 @@ bool checkKthBit( int n, int k )
 
 int toggleBits( int N, int L, int R )
 {
-    // code here
-    const int mask = ( ( 1 << R ) - 1 ) ^ ( ( 1 << ( L - 1 ) ) - 1 );   // masks out bits (L, R]. Might be an issue in the problem as it should be (1 << L) and not (1 << (L - 1)).
-    return N ^ mask;    // N ^ mask toggles the mask bits in N
+    const int rightMask = ~( 1 << ( R - 1 ) );  // Right most set bits
+    const int leftMask = ~( ( 1 << L ) - 1 );   // Left most set bits
+    return ( N & ( rightMask | leftMask ) );
+
+    //// Note: original code
+    //const int mask = ( ( 1 << R ) - 1 ) ^ ( ( 1 << ( L - 1 ) ) - 1 );   // masks out bits (L, R]. Might be an issue in the problem as it should be (1 << L) and not (1 << (L - 1)).
+    //return N ^ mask;    // N ^ mask toggles the mask bits in N
 }
 
 int setKthBit( int N, int K )
@@ -73,8 +78,12 @@ bool isPowerofTwo( long long n )
     if( n == 0 )
         return false;
 
-    // Only 1 bit should be set in n if it is a power of 2. ~( n - 1 ) sets all the prior bits so n & ~(n-1) should equal n if it is a power of 2.
-    return ( n & ~( n - 1 ) ) == n; 
+    // Only 1 bit should be set. n & (n - 1) == 0
+    return ( n & ( n - 1 ) ) == 0;
+
+    // Note: This doesn't seem right.
+    //// Only 1 bit should be set in n if it is a power of 2. ~( n - 1 ) sets all the prior bits so n & ~(n-1) should equal n if it is a power of 2.
+    //return ( n & ~( n - 1 ) ) == n; 
 }
 
 // Function to find number of bits needed to be flipped to convert A to B
@@ -87,6 +96,7 @@ int countBitsFlip( int a, int b )
     int count = 0;
     while( mask > 0 )
     {
+        // Non-powers of 2 will result in no. of bits being reduced by 1. Powers of 2 will have only 1 set bit which will result in 0.
         mask &= ( mask - 1 ); // mask & (mask - 1) decrements the no. of set bits in mask.
         ++count;
     }
@@ -150,23 +160,39 @@ int getOddOccurrence( int arr[], int n )
 
 int main( int argc, char* argv )
 {
-    Test test = Test::Test_RightmostDiffBit;
+    Test test = Test::Test_CountBitsFlip;
 
     switch( test )
     {
     case Test::Test_FirstSetBit:
+    {
+
         int num;
         std::cout << "Enter an integer: ";
         std::cin >> num;
         std::cout << "First set bit = " << getFirstSetBit( num ) << std::endl;
+    }
         break;
 
     case Test::Test_RightmostDiffBit:
+    {
+
         int m, n;
         std::cout << "Enter two integers and hit enter after each one: ";
         std::cin >> m;
         std::cin >> n;
         std::cout << "Right most diff bit = " << posOfRightMostDiffBit( m, n ) << std::endl;
+    }
+        break;
+
+    case Test::Test_CountBitsFlip:
+    {
+        int m, n;
+        std::cout << "Enter two integers and hit enter after each one: ";
+        std::cin >> m;
+        std::cin >> n;
+        std::cout << "No. of bits to flip to turn " << m << " into " << n << " = " << countBitsFlip( m, n ) << std::endl;
+    }
         break;
     }
 
