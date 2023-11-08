@@ -145,6 +145,63 @@ long long int prime_Sum( int n )
     return sum;
 }
 
+// Source: https://www.geeksforgeeks.org/problems/minimum-number-of-jumps-1587115620/1?page=1&sortBy=submissions
+int minJumps( int arr[], int n )
+{
+    // Your code here
+    if( n <= 1 ) return 0;
+
+    int coverage = 0, jump = 0, lastjumpindex = 0;
+    for( int i = 0; i < n; i++ )
+    {
+        coverage = max( coverage, i + arr[ i ] );
+
+        if( i == lastjumpindex )
+        {
+            jump++;
+            lastjumpindex = coverage;
+
+            if( coverage >= n - 1 ) return jump;
+            if( i >= n - 1 ) return -1;
+        }
+    }
+    return -1;
+}
+
+// Source: https://www.geeksforgeeks.org/problems/coin-change2448/1?page=1&sortBy=submissions
+template<int n, int sum>
+long long int count( int coins[] )
+{
+
+    // 2d table of solution space
+    long long int t[ n + 1 ][ sum + 1 ];
+
+    // First element of each row is 1, all other elements in the row are 0s
+    for( int i = 0; i <= n; i++ ) { t[ i ][ 0 ] = 1; }
+    for( int i = 1; i <= sum; i++ ) { t[ 0 ][ i ] = 0; }
+
+    for( int i = 1; i <= n; i++ )
+    {
+        for( int j = 1; j <= sum; j++ )
+        {
+
+            // Current coin denomination <= sum
+            if( coins[ i - 1 ] <= j )
+            {
+                t[ i ][ j ] = t[ i ][ j - coins[ i - 1 ] ] + t[ i - 1 ][ j ];
+            }
+
+            // Otherwise previous entry carries forward
+            else
+            {
+                t[ i ][ j ] = t[ i - 1 ][ j ];
+            }
+        }
+    }
+    return t[ n ][ sum ];
+    // code here.
+}
+
 int main( int argc, char* argv[] )
 {
     cout << "pairCubeCount(" << 1729 << ") = " << pairCubeCount( 1729 ) << endl;

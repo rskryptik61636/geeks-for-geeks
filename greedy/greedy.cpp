@@ -606,6 +606,42 @@ void dijkstra( int graph[ DSTRA_VERTS ][ DSTRA_VERTS ], int src )
     }
 }
 
+// Source: https://practice.geeksforgeeks.org/problems/-minimum-number-of-coins4426/1
+vector<int> minPartition( int N )
+{
+    // Denominations.
+    static const int den[] = { 1, 2, 5, 10, 20, 50, 100, 200, 500, 2000 };
+    static const int numDen = sizeof( den ) / sizeof( den[ 0 ] );
+
+    // Start from the largest denomination.
+    int cdi = numDen - 1;   // Current denomination index.
+    int balance = N;    // Remaining balance.
+    vector<int> result;
+    while( cdi >= 0 && balance >= 0 )
+    {
+        const int currDen = den[ cdi ];
+
+        // If the balance >= currDen.
+        if( balance >= currDen )
+        {
+            // Calculate the no. of notes of the current denomination to be subtracted.
+            const int numNotes = ( balance / currDen );
+
+            // Decrement the balance by the appropriate amount.
+            balance -= ( numNotes * currDen );
+
+            // Append numNotes of currDen to the result.
+            for( auto i = 0; i < numNotes; ++i )
+                result.emplace_back( currDen );
+        }
+
+        // Decrement cdi.
+        --cdi;
+    }
+
+    return result;
+}
+
 int main( int argc, char* argv[] )
 {
     //// fractional knapsack.
