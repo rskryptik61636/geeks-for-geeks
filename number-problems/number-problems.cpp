@@ -180,6 +180,7 @@ long long int count( int coins[] )
     for( int i = 0; i <= n; i++ ) { t[ i ][ 0 ] = 1; }
     for( int i = 1; i <= sum; i++ ) { t[ 0 ][ i ] = 0; }
 
+    std::cout << "Table contents:\n";
     for( int i = 1; i <= n; i++ )
     {
         for( int j = 1; j <= sum; j++ )
@@ -189,21 +190,65 @@ long long int count( int coins[] )
             if( coins[ i - 1 ] <= j )
             {
                 t[ i ][ j ] = t[ i ][ j - coins[ i - 1 ] ] + t[ i - 1 ][ j ];
+                std::cout << "b1," << t[ i ][ j ] << " = " << t[i][j - coins[i - 1]] << " + " << t[i - 1][j] << ";\t";
             }
 
             // Otherwise previous entry carries forward
             else
             {
                 t[ i ][ j ] = t[ i - 1 ][ j ];
+                std::cout << "b2," << t[ i ][ j ] << " = " << t[ i - 1 ][ j ] << ";\t";
             }
+
+            //std::cout << t[ i ][ j ] << ",";
         }
+        std::cout << std::endl;
     }
     return t[ n ][ sum ];
     // code here.
 }
 
+// Source: https://www.geeksforgeeks.org/problems/rod-cutting0840/1?page=1&sortBy=submissions
+int cutRod( int price[], int n )
+{
+    std::vector<int> dp( n + 1, 0 );
+    // From a length of 1 to n:
+    for( int i = 1; i <= n; i++ )
+    {
+        // From a length of 0 to i
+        for( int idx = 0; idx < i; idx++ )
+        {
+            // a = current max value of rod length i
+            // b = current max value of rod length idx
+            // c = price of rod length (i - idx)
+            // max value of rod length i = max(a, b + c)
+            const int a = dp[ i ], b = dp[ idx ], c = price[ i - idx - 1 ];
+            dp[ i ] = max( dp[ i ], dp[ idx ] + price[ i - idx - 1 ] );
+            std::cout << dp[ i ] << " = max( " << a << ", " << b << " + " << c << " )\n";
+        }
+        std::cout << std::endl;
+
+        // DPF
+        for( auto& n : dp )
+            std::cout << n << ", ";
+        std::cout << "\n\n";
+    }
+    return dp[ n ];
+}
+
 int main( int argc, char* argv[] )
 {
-    cout << "pairCubeCount(" << 1729 << ") = " << pairCubeCount( 1729 ) << endl;
+    //cout << "pairCubeCount(" << 1729 << ") = " << pairCubeCount( 1729 ) << endl;
+
+    /*int coins[] = { 1, 2, 3 };
+    auto coinCount = count<3, 4>( coins );
+    std::cout << "N = 3, sum = 4, coinCount = " << coinCount << std::endl;*/
+
+    int n = 8;
+    int price[] = { 1, 5, 8, 9, 10, 17, 17, 20 };
+    //int price[] = { 3, 5, 8, 9, 10, 17, 17, 20 };
+    int rodPrice = cutRod( price, n );
+    std::cout << "rodPrice = " << rodPrice << std::endl;
+    
     return 0;
 }
