@@ -208,32 +208,55 @@ long long int count( int coins[] )
     // code here.
 }
 
-// Source: https://www.geeksforgeeks.org/problems/rod-cutting0840/1?page=1&sortBy=submissions
 int cutRod( int price[], int n )
 {
-    std::vector<int> dp( n + 1, 0 );
-    // From a length of 1 to n:
-    for( int i = 1; i <= n; i++ )
-    {
-        // From a length of 0 to i
-        for( int idx = 0; idx < i; idx++ )
-        {
-            // a = current max value of rod length i
-            // b = current max value of rod length idx
-            // c = price of rod length (i - idx)
-            // max value of rod length i = max(a, b + c)
-            const int a = dp[ i ], b = dp[ idx ], c = price[ i - idx - 1 ];
-            dp[ i ] = max( dp[ i ], dp[ idx ] + price[ i - idx - 1 ] );
-            std::cout << dp[ i ] << " = max( " << a << ", " << b << " + " << c << " )\n";
-        }
-        std::cout << std::endl;
+    //// Source: https://www.geeksforgeeks.org/problems/rod-cutting0840/1?page=1&sortBy=submissions
+    //std::vector<int> dp( n + 1, 0 );
+    //// From a length of 1 to n:
+    //for( int i = 1; i <= n; i++ )
+    //{
+    //    // From a length of 0 to i
+    //    for( int idx = 0; idx < i; idx++ )
+    //    {
+    //        // a = current max value of rod length i
+    //        // b = current max value of rod length idx
+    //        // c = price of rod length (i - idx)
+    //        // max value of rod length i = max(a, b + c)
+    //        const int a = dp[ i ], b = dp[ idx ], c = price[ i - idx - 1 ];
+    //        dp[ i ] = max( dp[ i ], dp[ idx ] + price[ i - idx - 1 ] );
+    //        std::cout << dp[ i ] << " = max( " << a << ", " << b << " + " << c << " )\n";
+    //    }
+    //    std::cout << std::endl;
 
-        // DPF
-        for( auto& n : dp )
-            std::cout << n << ", ";
-        std::cout << "\n\n";
+    //    // DPF
+    //    for( auto& n : dp )
+    //        std::cout << n << ", ";
+    //    std::cout << "\n\n";
+    //}
+    //return dp[ n ];
+
+    // Source: Intro to Algos - bottom up solution
+    std::vector<int> result( n + 1, std::numeric_limits<int>::min() );  // Init with lowest possible cost
+
+    // Revenue of length 0 rod is 0
+    result[ 0 ] = 0;
+
+    // Solving subproblems of size [j, n]
+    for( int j = 1; j <= n; ++j )
+    {
+        int currResult = std::numeric_limits<int>::min();
+
+        // Solving subproblems of size [i, j]
+        for( int i = 1; i <= j; ++i )
+        {
+            currResult = std::max( currResult, price[ i ] + result[ j - i ] );  // Best result = max( currResult, price[rod length i] + bestResult[rod length j - i]
+        }
+
+        // currResult = bestResult[j]
+        result[ j ] = currResult;
     }
-    return dp[ n ];
+
+    return result[ n ];
 }
 
 int main( int argc, char* argv[] )
@@ -245,8 +268,8 @@ int main( int argc, char* argv[] )
     std::cout << "N = 3, sum = 4, coinCount = " << coinCount << std::endl;*/
 
     int n = 8;
-    int price[] = { 1, 5, 8, 9, 10, 17, 17, 20 };
-    //int price[] = { 3, 5, 8, 9, 10, 17, 17, 20 };
+    //int price[] = { 1, 5, 8, 9, 10, 17, 17, 20 };
+    int price[] = { 3, 5, 8, 9, 10, 17, 17, 20 };
     int rodPrice = cutRod( price, n );
     std::cout << "rodPrice = " << rodPrice << std::endl;
     
