@@ -259,6 +259,41 @@ int cutRod( int price[], int n )
     return result[ n ];
 }
 
+// Source: https://www.geeksforgeeks.org/problems/sorting-elements-of-an-array-by-frequency/0
+void frequencyBasedSort() {
+
+    // TODO: Move test code into main and finish.
+
+    using Key = uint32_t;
+    using Count = uint32_t;
+
+    // Get the test case count
+    uint32_t tc = 0;
+    cin >> tc;
+
+    // For each test case...
+    for (auto t = 0; t < tc; ++t)
+    {
+        // Read in the number of elements.
+        uint32_t n = 0;
+        cin >> n;
+
+        // Create a map<Key, Count> where:
+        // Key = input number
+        // Count = frequency
+        std::vector<uint32_t> nums(n, 0);
+        for (auto i = 0; i < n; ++i)
+        {
+            uint32_t cn = 0;
+            cin >> cn;
+            nums[i] = cn;
+        }
+
+    }
+
+    return 0;
+}
+
 int main( int argc, char* argv[] )
 {
     //cout << "pairCubeCount(" << 1729 << ") = " << pairCubeCount( 1729 ) << endl;
