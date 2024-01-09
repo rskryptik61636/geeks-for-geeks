@@ -1,6 +1,8 @@
 #include <cmath>
 #include <iostream>
 #include <vector>
+#include <map>
+#include <set>
 
 using namespace std;
 
@@ -260,14 +262,32 @@ int cutRod( int price[], int n )
 }
 
 // Source: https://www.geeksforgeeks.org/problems/sorting-elements-of-an-array-by-frequency/0
-void frequencyBasedSort() {
-
-    // TODO: Move test code into main and finish.
-
+void frequencyBasedSort() 
+{
     using Key = uint32_t;
     using Count = uint32_t;
 
+    struct FrequencyPair
+    {
+        Key number;
+        Count count;
+    };
+
+    struct FrequencyPairCompare
+    {
+        bool operator()(const FrequencyPair& a, const FrequencyPair& b) const
+        {
+            if (a.count != b.count)
+            {
+                return a.count > b.count;
+            }
+
+            return a.number <= b.number;
+        }
+    };
+
     // Get the test case count
+    cout << "Enter the test case count: ";
     uint32_t tc = 0;
     cin >> tc;
 
@@ -275,6 +295,7 @@ void frequencyBasedSort() {
     for (auto t = 0; t < tc; ++t)
     {
         // Read in the number of elements.
+        cout << "Enter the number of elements: ";
         uint32_t n = 0;
         cin >> n;
 
@@ -282,16 +303,38 @@ void frequencyBasedSort() {
         // Key = input number
         // Count = frequency
         std::vector<uint32_t> nums(n, 0);
+        std::map<Key, Count> freqs;
+        std::cout << "Enter the numbers: ";
         for (auto i = 0; i < n; ++i)
         {
             uint32_t cn = 0;
             cin >> cn;
-            nums[i] = cn;
+            if (freqs.find(cn) == freqs.end())
+            {
+                freqs[cn] = 0;
+            }
+            ++freqs[cn];
+            //nums[i] = cn;
         }
 
-    }
+        // Create a set of FrequencyPairs with FrequencyPairCompare as the comparison function.
+        std::set<FrequencyPair, FrequencyPairCompare> sortedSet;
+        for (auto i = freqs.begin(); i != freqs.end(); ++i)
+        {
+            sortedSet.insert({ i->first, i->second });
+        }
 
-    return 0;
+        // Print out the frequency based sorted elements.
+        cout << "Frequency based sorted elements: ";
+        for (auto i = sortedSet.begin(); i != sortedSet.end(); ++i)
+        {
+            for (auto j = 0; j < i->count; ++j)
+            {
+                cout << i->number << " ";
+            }
+        }
+        cout << endl;
+    }
 }
 
 int main( int argc, char* argv[] )
@@ -302,11 +345,13 @@ int main( int argc, char* argv[] )
     auto coinCount = count<3, 4>( coins );
     std::cout << "N = 3, sum = 4, coinCount = " << coinCount << std::endl;*/
 
-    int n = 8;
-    //int price[] = { 1, 5, 8, 9, 10, 17, 17, 20 };
-    int price[] = { 3, 5, 8, 9, 10, 17, 17, 20 };
-    int rodPrice = cutRod( price, n );
-    std::cout << "rodPrice = " << rodPrice << std::endl;
+    //int n = 8;
+    ////int price[] = { 1, 5, 8, 9, 10, 17, 17, 20 };
+    //int price[] = { 3, 5, 8, 9, 10, 17, 17, 20 };
+    //int rodPrice = cutRod( price, n );
+    //std::cout << "rodPrice = " << rodPrice << std::endl;
+
+    frequencyBasedSort();
     
     return 0;
 }
