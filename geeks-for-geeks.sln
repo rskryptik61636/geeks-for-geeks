@@ -19,6 +19,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "graphs", "graphs\graphs.vcx
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "trees", "trees\trees.vcxproj", "{41F24CE8-5982-4555-A6F7-A2C3EE2A8703}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "arrays", "arrays\arrays.vcxproj", "{E5C7F9BC-502A-4821-A066-F14CD84FB145}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -91,6 +93,14 @@ Global
 		{41F24CE8-5982-4555-A6F7-A2C3EE2A8703}.Release|x64.Build.0 = Release|x64
 		{41F24CE8-5982-4555-A6F7-A2C3EE2A8703}.Release|x86.ActiveCfg = Release|Win32
 		{41F24CE8-5982-4555-A6F7-A2C3EE2A8703}.Release|x86.Build.0 = Release|Win32
+		{E5C7F9BC-502A-4821-A066-F14CD84FB145}.Debug|x64.ActiveCfg = Debug|x64
+		{E5C7F9BC-502A-4821-A066-F14CD84FB145}.Debug|x64.Build.0 = Debug|x64
+		{E5C7F9BC-502A-4821-A066-F14CD84FB145}.Debug|x86.ActiveCfg = Debug|Win32
+		{E5C7F9BC-502A-4821-A066-F14CD84FB145}.Debug|x86.Build.0 = Debug|Win32
+		{E5C7F9BC-502A-4821-A066-F14CD84FB145}.Release|x64.ActiveCfg = Release|x64
+		{E5C7F9BC-502A-4821-A066-F14CD84FB145}.Release|x64.Build.0 = Release|x64
+		{E5C7F9BC-502A-4821-A066-F14CD84FB145}.Release|x86.ActiveCfg = Release|Win32
+		{E5C7F9BC-502A-4821-A066-F14CD84FB145}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
