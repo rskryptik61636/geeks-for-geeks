@@ -1,4 +1,6 @@
 #include <string>
+#include <vector>
+#include <set>
 
 using namespace std;
 
@@ -120,6 +122,33 @@ char kthCharacter( int m, int n, int k )
 
     // Return the k'th char of prev.
     return prev[ k - 1 ];
+}
+
+// Source: https://www.geeksforgeeks.org/problems/permutations-of-a-given-string2041/1
+std::vector<string> find_permutation(const string& S) {
+
+    std::set<string> ans;
+
+    auto solve = [&](auto&& solve, const string & S, string cur, std::vector<int>&vis)
+    {
+        if (cur.length() == S.length()) {
+            ans.insert(cur);
+            return;
+        }
+
+        for (int i = 0; i < S.length(); i++) {
+            if (!vis[i]) {
+                vis[i] = 1;
+                solve(solve, S, cur + S[i], vis);
+                vis[i] = 0;
+            }
+        }
+    };
+
+    std::vector<int> vis(S.length(), 0);
+    string str;
+    solve(solve, S, str, vis);
+    return std::vector<string>(ans.begin(), ans.end());
 }
 
 int main( int argc, char* argv[] )
