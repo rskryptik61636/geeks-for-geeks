@@ -3,6 +3,8 @@
 #include <vector>
 #include <map>
 #include <set>
+#include <algorithm>
+#include <unordered_set>
 
 using namespace std;
 
@@ -335,6 +337,119 @@ void frequencyBasedSort()
         }
         cout << endl;
     }
+}
+
+// Source: https://www.educative.io/blog/apple-coding-interview-questions#array
+// 3 tuple sum: Runtime Complexity: Quadratic, Memory Complexity : Constant
+bool find_sum_of_two(vector<int>& A, int val, size_t start_index) 
+{
+    for (int i = start_index, j = A.size() - 1; i < j;) {
+        int sum = A[i] + A[j];
+        if (sum == val) {
+            return true;
+        }
+
+        if (sum < val) {
+            ++i;
+        }
+        else {
+            --j;
+        }
+    }
+
+    return false;
+}
+
+bool find_sum_of_three_v3(vector<int> arr, int required_sum) {
+
+    std::sort(arr.begin(), arr.end());
+
+    for (int i = 0; i < arr.size() - 2; ++i) {
+        int remaining_sum = required_sum - arr[i];
+        if (find_sum_of_two(arr, remaining_sum, i + 1)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+// Merged intervals: Complexity: O(n); Memory: O(n)
+class Pair 
+{
+public:
+    int first, second;
+    Pair(int x, int y) {
+        first = x;
+        second = y;
+    }
+};
+
+vector<Pair> merge_intervals(vector<Pair>& v) 
+{
+
+    if (v.size() == 0) {
+        return v;
+    }
+
+    vector<Pair> result;
+    result.push_back(Pair(v[0].first, v[0].second));
+
+    for (int i = 1; i < v.size(); i++) {
+        int x1 = v[i].first;
+        int y1 = v[i].second;
+        int x2 = result[result.size() - 1].first;
+        int y2 = result[result.size() - 1].second;
+
+        if (y2 >= x1) {
+            result[result.size() - 1].second = max(y1, y2);
+        }
+        else {
+            result.push_back(Pair(x1, y1));
+        }
+    }
+    return result;
+}
+
+// Stolen from: https://www.geeksforgeeks.org/array-rotation/
+// Function to reverse array elements from start to end
+void reverse(vector<int>& arr, int start, int end) {
+    while (start < end) {
+        int temp = arr[start];
+        arr[start] = arr[end];
+        arr[end] = temp;
+        start++;
+        end--;
+    }
+}
+
+// Function to left rotate array elements by d positions
+void leftRotate(vector<int>& arr, int d) {
+    int n = arr.size();
+    d = d % n; // To handle case when d >= n
+
+    // Reverse the first d elements
+    reverse(arr, 0, d - 1);
+    // Reverse the remaining elements
+    reverse(arr, d, n - 1);
+    // Reverse the whole array
+    reverse(arr, 0, n - 1);
+}
+
+// Returns number of pairs in arr[0..n-1] with sum equal
+// to 'sum'
+int getPairsCount(int arr[], int n, int k)
+{
+    std::unordered_set<int> s;
+    int count = 0;
+    for (int i = 0; i < n; i++) {
+        if (s.find(k - arr[i]) != s.end()) {
+            count++;
+        }
+        else
+            s.insert(k - arr[i]);
+    }
+    return count;
 }
 
 int main( int argc, char* argv[] )

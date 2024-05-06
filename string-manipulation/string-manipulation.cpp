@@ -1,6 +1,8 @@
 #include <string>
 #include <vector>
 #include <set>
+#include <stdexcept>
+#include <algorithm>
 
 using namespace std;
 
@@ -151,7 +153,48 @@ std::vector<string> find_permutation(const string& S) {
     return std::vector<string>(ans.begin(), ans.end());
 }
 
+// Validate IP address
+bool validIPAddress(std::string address)
+{
+    bool result = true;
+
+    // There should be only 3 '.'
+    unsigned nDelim = 0;
+    auto pos = address.begin();
+    do
+    {
+        auto prevPos = pos;
+        pos = std::find(prevPos, address.end(), '.');   // Skip ahead past the '.' if the first delim has been found
+        if (pos != address.end())
+        {
+            try
+            {
+                const auto currNumStr = std::string(prevPos, pos);
+                const auto currNum = std::stoul(currNumStr);
+                if (currNum > 255)
+                {
+                    return false;   // No. must be in [0, 255]
+                }
+            }
+            catch (const std::invalid_argument&)
+            {
+                // Not a valid number.
+                return false;
+            }
+            ++nDelim;
+            ++pos;  // Skip past the '.'
+        }
+    } while (pos != address.end());
+
+    if (nDelim != 3)
+        return false;
+
+    return result;
+}
+
 int main( int argc, char* argv[] )
 {
+    //bool test = validIPAddress("192.0.1.1");
+    bool test = validIPAddress("168.5.1.5.7");
     return 0;
 }
