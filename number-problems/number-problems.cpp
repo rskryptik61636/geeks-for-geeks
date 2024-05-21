@@ -492,6 +492,135 @@ void towerOfHanoi(int n)
     }
 }
 
+/*
+Certainly! Let's dive into how the multiplication program using bitwise operators works. We'll break it down step by step:
+
+1. **Input Validation**:
+   - The `multiply` function takes two integer inputs: `a` and `b`.
+   - We assume that both `a` and `b` are non-negative integers (since negative numbers would require additional handling).
+
+2. **Binary Multiplication Algorithm**:
+   - The goal is to compute the product of `a` and `b` using only addition and bitwise operations.
+   - We initialize a variable called `result` to store the final product.
+
+3. **Bitwise AND (`&`) Operation**:
+   - The expression `b & 1` checks whether the least significant bit (LSB) of `b` is set (i.e., whether it is equal to 1).
+   - If the LSB of `b` is 1, we add the current value of `a` to the `result`.
+   - Otherwise, we skip adding anything to the result.
+
+4. **Left Shift (`<<`) Operation**:
+   - We left shift `a` by 1 (equivalent to multiplying it by 2).
+   - This effectively doubles the value of `a`.
+
+5. **Right Shift (`>>`) Operation**:
+   - We right shift `b` by 1 (equivalent to dividing it by 2).
+   - This effectively discards the LSB of `b`.
+
+6. **Repeat Until `b` Becomes 0**:
+   - We continue the process until `b` becomes 0 (i.e., all bits of `b` have been processed).
+   - In each iteration, we check the LSB of `b` using `b & 1`.
+   - If it's 1, we add the current value of `a` to the result.
+   - Then we update `a` by left shifting it, and `b` by right shifting it.
+
+7. **Final Result**:
+   - The final value of `result` represents the product of `a` and `b`.
+
+Here's an example:
+- Suppose we want to multiply `a = 5` and `b = 3`.
+- Binary representation:
+  - `5` (a) = `0101`
+  - `3` (b) = `0011`
+- Iterations:
+  - First iteration: `b & 1` evaluates to 1 (LSB of `b` is 1), so we add `a` to the result.
+  - Update `a` by left shifting: `a = 10` (binary: `1010`).
+  - Update `b` by right shifting: `b = 1` (binary: `0001`).
+  - Second iteration: `b & 1` evaluates to 1, so we add the updated `a` (which is 10) to the result.
+  - Update `a` by left shifting: `a = 20` (binary: `10100`).
+  - Update `b` by right shifting: `b = 0` (binary: `0000`).
+- Result: `result = 15` (binary: `1111`), which is the correct answer.
+*/
+int multiply(int a, int b) {
+    int result = 0;
+    while (b > 0) {
+        if (b & 1) {
+            result += a;
+        }
+        a <<= 1; // Left shift a by 1 (equivalent to multiplying by 2)
+        b >>= 1; // Right shift b by 1 (equivalent to dividing by 2)
+    }
+    return result;
+}
+
+/*
+* Certainly! Let's dive into how the division program using bitwise operators works. We'll break it down step by step:
+
+1. **Input Validation**:
+   - The `divide` function takes two integer inputs: `dividend` and `divisor`.
+   - We handle the case where the divisor is zero to avoid division by zero errors.
+
+2. **Sign Handling**:
+   - We determine the sign of the result (`quotient`) based on whether the dividend and divisor have the same sign or opposite signs.
+   - If they have opposite signs, the result will be negative; otherwise, it will be positive.
+
+3. **Conversion to Positive Numbers**:
+   - We work with the absolute values of the dividend and divisor (using `std::abs`).
+   - This ensures that we handle the division correctly regardless of the original signs.
+
+4. **Binary Long Division**:
+   - We perform binary long division, similar to how we do it manually.
+   - Start with the dividend (`num`) and divisor (`den`).
+   - Initialize the `quotient` as 0.
+
+5. **Iterate Through Bits**:
+   - We iterate through the bits of the dividend (from left to right).
+   - For each bit position (from 31 to 0):
+     - If `(num >> i) >= den`, we subtract `den << i` from `num` and set the corresponding bit in the `quotient`.
+     - Otherwise, we skip that bit.
+
+6. **Shifts and Subtractions**:
+   - The left shift (`<<`) effectively multiplies `den` by 2 for each iteration.
+   - The subtraction (`num -= (den << i)`) reduces the remaining value of `num`.
+
+7. **Result**:
+   - The final value of `quotient` represents the result of the division.
+
+Here's an example:
+- Suppose we want to divide 15 by 3.
+- Binary representation:
+  - `15` (dividend) = `1111`
+  - `3` (divisor) = `0011`
+- Iterations:
+  - First iteration: `(15 >> 3) = 1 >= 3`, so subtract `3 << 3` from `15` and set the 3rd bit in the quotient.
+  - Second iteration: `(15 >> 2) = 3 >= 3`, so subtract `3 << 2` from the updated `15` and set the 2nd bit in the quotient.
+  - Third iteration: `(15 >> 1) = 7 >= 3`, so subtract `3 << 1` from the updated `15` and set the 1st bit in the quotient.
+  - Fourth iteration: `(15 >> 0) = 15 >= 3`, so subtract `3 << 0` from the updated `15` and set the 0th bit in the quotient.
+- Result: `quotient = 5` (binary: `0101`), which is the correct answer.
+*/
+int divide(int dividend, int divisor) {
+    if (divisor == 0) {
+        std::cerr << "Error: Division by zero!" << std::endl;
+        return 0;
+    }
+
+    int sign = 1;
+    if ((dividend < 0) ^ (divisor < 0)) {
+        sign = -1;
+    }
+
+    long long num = std::abs(static_cast<long long>(dividend));
+    long long den = std::abs(static_cast<long long>(divisor));
+
+    long long quotient = 0;
+    for (int i = 31; i >= 0; --i) {
+        if ((num >> i) >= den) {
+            quotient |= (1LL << i);
+            num -= (den << i);
+        }
+    }
+
+    return static_cast<int>(sign * quotient);
+}
+
 int main( int argc, char* argv[] )
 {
     //cout << "pairCubeCount(" << 1729 << ") = " << pairCubeCount( 1729 ) << endl;
@@ -506,7 +635,11 @@ int main( int argc, char* argv[] )
     //int rodPrice = cutRod( price, n );
     //std::cout << "rodPrice = " << rodPrice << std::endl;
 
-    frequencyBasedSort();
+    //frequencyBasedSort();
+
+    int num1 = 5;
+    int num2 = 3;
+    std::cout << num1 << " * " << num2 << " = " << multiply(num1, num2) << std::endl;
     
     return 0;
 }
