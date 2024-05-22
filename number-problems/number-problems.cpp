@@ -612,9 +612,9 @@ int divide(int dividend, int divisor) {
 
     long long quotient = 0;
     for (int i = 31; i >= 0; --i) {
-        if ((num >> i) >= den) {
-            quotient |= (1LL << i);
-            num -= (den << i);
+        if ((num >> i) >= den) {    // den is divisible by 2^i
+            quotient |= (1LL << i); // quotient is updated with 2^i
+            num -= (den << i);      // num is reduced by 2*i*den
         }
     }
 
@@ -637,9 +637,9 @@ int main( int argc, char* argv[] )
 
     //frequencyBasedSort();
 
-    int num1 = 5;
+    int num1 = 15;
     int num2 = 3;
-    std::cout << num1 << " * " << num2 << " = " << multiply(num1, num2) << std::endl;
+    std::cout << num1 << " * " << num2 << " = " << divide(num1, num2) << std::endl;
     
     return 0;
 }

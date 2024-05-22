@@ -39,6 +39,9 @@ public:
 
 	// Depth first search of the graph starting from node start.
 	void dfs( int start );
+
+	// Breadth first search of the graph starting from node start.
+	void bfs(int start);
 };
 
 Graph::Graph( int inV ) :
@@ -197,6 +200,41 @@ void Graph::dfs( int start )
 	}
 }
 
+// Depth first search of the graph starting from node start.
+void Graph::bfs(int start)
+{
+	// BFS queue.
+	queue<int> dfsQueue;
+	dfsQueue.push(start);
+
+	// Visited nodes.
+	vector<bool> visited(V, false);
+
+	// Until the stack is empty:
+	while (!dfsQueue.empty())
+	{
+		// Pop the top of the stack.
+		const auto top = dfsQueue.front();
+		dfsQueue.pop();
+
+		// Print the current node if its not yet visited.
+		if (!visited[top])
+		{
+			visited[top] = true;
+			cout << top << " ";
+		}
+
+		// Push all the non-visited nodes adjacent to top onto the stack.
+		for (auto i = adj[top].begin(); i != adj[top].end(); ++i)
+		{
+			if (!visited[*i])
+			{
+				dfsQueue.push(*i);
+			}
+		}
+	}
+}
+
 // Source: https://www.geeksforgeeks.org/bipartite-graph/
 bool isBipartite(int V, vector<int> adj[])
 {
@@ -258,23 +296,23 @@ bool isBipartite(int V, vector<int> adj[])
 // Driver Code
 int main()
 {
-	static const int V = 4, E = 8;
-	
-	//adjacency list for storing graph
-	vector<int> adj[V];
-	adj[0] = { 1,3 };
-	adj[1] = { 0,2 };
-	adj[2] = { 1,3 };
-	adj[3] = { 0,2 };
+	//static const int V = 4, E = 8;
+	//
+	////adjacency list for storing graph
+	//vector<int> adj[V];
+	//adj[0] = { 1,3 };
+	//adj[1] = { 0,2 };
+	//adj[2] = { 1,3 };
+	//adj[3] = { 0,2 };
 
 
-	bool ans = isBipartite(V, adj);
-	//returns 1 if bipartite graph is possible
-	if (ans)
-		cout << "isBipartite\n";
-	//returns 0 if bipartite graph is not possible
-	else
-		cout << "isNotBipartite\n";
+	//bool ans = isBipartite(V, adj);
+	////returns 1 if bipartite graph is possible
+	//if (ans)
+	//	cout << "isBipartite\n";
+	////returns 0 if bipartite graph is not possible
+	//else
+	//	cout << "isNotBipartite\n";
 
 	//// Create a graph given in the above diagram
 	//Graph g( 6 );
@@ -291,18 +329,22 @@ int main()
 	//g.topologicalSort();
 
 	// DFS
-	//// Create a graph given in the above diagram
-	//Graph g(10);
-	//g.addEdge( 0, 1 );
-	//g.addEdge( 0, 9 );
-	//g.addEdge( 1, 2 );
-	//g.addEdge( 2, 0 );
-	//g.addEdge( 2, 3 );
-	//g.addEdge( 9, 3 );
+	// Create a graph given in the above diagram
+	Graph g(10);
+	g.addEdge( 0, 1 );
+	g.addEdge( 0, 9 );
+	g.addEdge( 1, 2 );
+	g.addEdge( 2, 0 );
+	g.addEdge( 2, 3 );
+	g.addEdge( 9, 3 );
 
-	//cout << "Following is Depth First Traversal"
-	//	" (starting from vertex 2) \n";
-	//g.dfs( 2 );
+	cout << "Following is Depth First Traversal"
+		" (starting from vertex 2) \n";
+	g.dfs( 2 );
+
+	cout << "\nFollowing is Breadth First Traversal"
+		" (starting from vertex 2) \n";
+	g.bfs(2);
 
 	return 0;
 }
