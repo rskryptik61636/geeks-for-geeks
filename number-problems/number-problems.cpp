@@ -621,6 +621,105 @@ int divide(int dividend, int divisor) {
     return static_cast<int>(sign * quotient);
 }
 
+// C++ program to Find the repeating
+// and missing elements
+// Source: https://www.geeksforgeeks.org/find-a-repeating-and-a-missing-number/
+void printTwoElements(int arr[], int size)
+{
+    int i;
+    cout << "The repeating element is ";
+
+    for (i = 0; i < size; i++) {
+        if (arr[abs(arr[i]) - 1] > 0)
+            arr[abs(arr[i]) - 1] = -arr[abs(arr[i]) - 1];
+        else
+            cout << abs(arr[i]) << "\n";
+    }
+
+    cout << "and the missing element is ";
+    for (i = 0; i < size; i++) {
+        if (arr[i] > 0)
+            cout << (i + 1);
+    }
+}
+
+/* Function to print product array
+for a given array arr[] of size n */
+
+// Source: https://www.geeksforgeeks.org/a-product-array-puzzle/
+// This code is contributed by rathbhupendra
+void productArray(int arr[], int n)
+{
+
+    // Base case 
+    if (n == 1) {
+        cout << 0;
+        return;
+    }
+
+    int i, temp = 1;
+
+    /* Allocate memory for the product array */
+    //int* prod = new int[(sizeof(int) * n)];
+    vector<int> prod(n, 1);
+
+    ///* Initialize the product array as 1 */
+    //memset(prod, 1, n);
+
+    /* In this loop, temp variable contains product of
+    elements on left side excluding arr[i] */
+    for (i = 0; i < n; i++) {
+        prod[i] = temp;
+        temp *= arr[i];
+    }
+
+    /* Initialize temp to 1
+    for product on right side */
+    temp = 1;
+
+    /* In this loop, temp variable contains product of
+    elements on right side excluding arr[i] */
+    for (i = n - 1; i >= 0; i--) {
+        prod[i] *= temp;
+        temp *= arr[i];
+    }
+
+    /* print the constructed prod array */
+    for (i = 0; i < n; i++)
+        cout << prod[i] << " ";
+
+    return;
+}
+
+// Source: https://www.geeksforgeeks.org/majority-element/
+int majorityElement(vector<int>& nums) {
+    int num_bits = 32;
+    int majority_element = 0;
+
+    for (int i = 0; i < num_bits; ++i) {
+        int count_ones = 0, count_zeros = 0;
+
+        for (int num : nums) {
+            if ((num >> i) & 1)
+                count_ones++;
+            else
+                count_zeros++;
+        }
+
+        // The element that occurred the most times would have the most bits set overall at each position 'i'
+        if (count_ones > count_zeros)
+            majority_element |= (1 << i);
+    }
+
+    int count_majority = 0;
+    for (int num : nums) {
+        if (num == majority_element)
+            count_majority++;
+    }
+
+    return count_majority > nums.size() / 2 ? majority_element : -1;
+}
+
 int main( int argc, char* argv[] )
 {
     //cout << "pairCubeCount(" << 1729 << ") = " << pairCubeCount( 1729 ) << endl;
@@ -637,9 +736,25 @@ int main( int argc, char* argv[] )
 
     //frequencyBasedSort();
 
-    int num1 = 15;
+ /*   int num1 = 15;
     int num2 = 3;
-    std::cout << num1 << " * " << num2 << " = " << divide(num1, num2) << std::endl;
-    
+    std::cout << num1 << " * " << num2 << " = " << divide(num1, num2) << std::endl;*/
+
+ /*   int arr[] = { 7, 3, 4, 5, 5, 6, 2 };
+    int n = sizeof(arr) / sizeof(arr[0]);
+    printTwoElements(arr, n);*/
+
+    //int arr[] = { 10, 3, 5, 6, 2 };
+    //int n = sizeof(arr) / sizeof(arr[0]);
+    //cout << "The product array is: \n";
+    //productArray(arr, n);
+
+    vector<int> nums = { 3, 3, 4, 2, 4, 4, 2, 4, 4 };
+    int result = majorityElement(nums);
+    if (result != -1)
+        cout << "Majority Element: " << result << endl;
+    else
+        cout << "No Majority Element" << endl;
+
     return 0;
 }
