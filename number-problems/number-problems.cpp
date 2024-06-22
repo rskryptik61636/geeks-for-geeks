@@ -720,6 +720,42 @@ int majorityElement(vector<int>& nums) {
     return count_majority > nums.size() / 2 ? majority_element : -1;
 }
 
+// Rotate a 2D array clockwise by 90 degrees
+// Source: https://www.geeksforgeeks.org/rotate-a-matrix-by-90-degree-in-clockwise-direction-without-using-any-extra-space/
+template<const uint32_t N>
+void rotate90Clockwise(int arr[N][N])
+{
+    /* Move each element to its correponding location starting from the outermost square to the innermost.
+    * Work in sets of 4 corresponding numbers and move each one to its target position using a temp variable 
+    * -to store the first number to prevent it from being overwritten.
+    * Input:
+        1  2  3 4
+         5  6  7 8
+         9 10 11 12
+        13 14 15 16
+        
+      Output:
+        13 9 5 1
+        14 10 6 2
+        15 11 7 3
+        16 12 8 4
+    */
+    // Traverse each cycle
+    for (int x = 0; x < N / 2; x++) 
+    {
+        for (int y = x; y < N - x - 1; y++) 
+        {
+            // Swap elements of each cycle
+            // in clockwise direction
+            int temp = arr[x][y];
+            arr[x][y] = arr[N - 1 - y][x];                  // top-left = bottom-left
+            arr[N - 1 - y][x] = arr[N - 1 - x][N - 1 - y];  // bottom-left = bottom-right
+            arr[N - 1 - x][N - 1 - y] = arr[y][N - 1 - x];  // bottom-right = top-right
+            arr[y][N - 1 - x] = temp;                       // top-right = top-left
+        }
+    }
+}
+
 int main( int argc, char* argv[] )
 {
     //cout << "pairCubeCount(" << 1729 << ") = " << pairCubeCount( 1729 ) << endl;
@@ -749,12 +785,19 @@ int main( int argc, char* argv[] )
     //cout << "The product array is: \n";
     //productArray(arr, n);
 
-    vector<int> nums = { 3, 3, 4, 2, 4, 4, 2, 4, 4 };
+    /*vector<int> nums = { 3, 3, 4, 2, 4, 4, 2, 4, 4 };
     int result = majorityElement(nums);
     if (result != -1)
         cout << "Majority Element: " << result << endl;
     else
-        cout << "No Majority Element" << endl;
+        cout << "No Majority Element" << endl;*/
+
+    static const uint32_t N = 4;
+    int arr[N][N] = { { 1, 2, 3, 4 },
+                      { 5, 6, 7, 8 },
+                      { 9, 10, 11, 12 },
+                      { 13, 14, 15, 16 } };
+    rotate90Clockwise<N>(arr);
 
     return 0;
 }
