@@ -90,7 +90,7 @@ int isPrime( int N )
 // Source: https://practice.geeksforgeeks.org/problems/sieve-of-eratosthenes5242/1#
 vector<int> sieveOfEratosthenes( int N )
 {
-    static constexpr bool debugPrints = false;
+    static constexpr bool debugPrints = true;
 
     // Init the sieve.
     vector<bool> sieve( N - 1, true );
@@ -756,6 +756,72 @@ void rotate90Clockwise(int arr[N][N])
     }
 }
 
+/*
+#### Problem Understanding:
+We have a cafeteria table with N seats. Each diner currently seated follows social distancing guidelines which require K seats to their left and K seats to their right to be empty. We need to determine how many additional diners can be seated while still adhering to these guidelines.
+
+#### Input:
+- `N`: Total number of seats.
+- `K`: Number of seats that must remain empty on each side of a seated diner.
+- `M`: Number of currently seated diners.
+- `S`: A vector containing the seats of currently seated diners.
+
+*/
+int maxAdditionalDiners(int N, int K, vector<int>& S) 
+{
+    // Sort the occupied seats to traverse them in order
+    sort(S.begin(), S.end());
+
+    int extraSpace = 0, firstOpenSeat = 1, openSeats = 0;
+    for (auto& takenSeat : S)
+    {
+        // No. of open seats in [firstOpenSeat, takenSeat] assuming K distance requirement
+        openSeats = takenSeat - K - firstOpenSeat;
+        if (openSeats > 0)
+        {
+            extraSpace += static_cast<int>(ceil(static_cast<float>(openSeats) / static_cast<float>(K + 1)));
+        }
+
+        // Advance firstOpenSet to takenSeat + K + 1
+        firstOpenSeat = takenSeat + K + 1;
+    }
+
+    // Last interval past the last occupied seat
+    openSeats = N + 1 - firstOpenSeat;
+    if (openSeats > 0)
+    {
+        extraSpace += static_cast<int>(ceil(static_cast<float>(openSeats) / static_cast<float>(K + 1)));
+    }
+
+    return extraSpace;
+}
+
+// Stolen from: https://leetcode.com/discuss/interview-question/1641064/facebook-director-of-photography-puzzle-overflow
+long long getArtisticPhotographCount(int N, string C, int X, int Y) 
+{
+    std::vector<long> B(N + 1, 0), P(N + 1, 0);
+    long ans = 0;
+
+    for (int i = 1; i <= N; i++) {
+        char curr = C[i - 1];
+        P[i] = P[i - 1] + ((curr == 'P') ? 1 : 0);
+        B[i] = B[i - 1] + ((curr == 'B') ? 1 : 0);
+    }
+
+    for (int i = 0; i < N; i++) {
+        if (C[i] == 'A') {
+            int fstart = (i + X) <= N ? (i + X) : N;
+            int fend = (i + Y + 1) <= N ? (i + Y + 1) : N;
+            int bend = (i - X + 1) >= 0 ? (i - X + 1) : 0;
+            int bstart = (i - Y) >= 0 ? (i - Y) : 0;
+            ans += (P[fend] - P[fstart]) * (B[bend] - B[bstart]);
+            ans += (B[fend] - B[fstart]) * (P[bend] - P[bstart]);
+        }
+    }
+
+    return ans;
+}
+
 int main( int argc, char* argv[] )
 {
     //cout << "pairCubeCount(" << 1729 << ") = " << pairCubeCount( 1729 ) << endl;
@@ -792,12 +858,18 @@ int main( int argc, char* argv[] )
     else
         cout << "No Majority Element" << endl;*/
 
-    static const uint32_t N = 4;
+    /*static const uint32_t N = 4;
     int arr[N][N] = { { 1, 2, 3, 4 },
                       { 5, 6, 7, 8 },
                       { 9, 10, 11, 12 },
                       { 13, 14, 15, 16 } };
-    rotate90Clockwise<N>(arr);
+    rotate90Clockwise<N>(arr);*/
+
+    //auto primesFive = sieveOfEratosthenes(10);
+
+    int N = /*15*/ 10, K = /*2*/ 1;
+    vector<int> S { /*11, 6, 14*/ 2, 6 };
+    int nDiners = maxAdditionalDiners(N, K, S);
 
     return 0;
 }
